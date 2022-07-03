@@ -7,7 +7,6 @@ const deserializedCard = (card) => ({
     card: card.cards[0]
 })
 
-
 const cardValues = (array) => {
     let value = 0;
     array.map((element) => {

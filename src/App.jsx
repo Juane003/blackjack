@@ -1,9 +1,9 @@
-import Deck from "./Components/Deck/Deck";
+import { Gameboard } from "./Components";
 
 const App = () =>{
   return(
     <div>
-      <Deck></Deck>
+      <Gameboard/>
     </div>
   )
 }
