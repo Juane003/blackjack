@@ -1,36 +1,17 @@
-const highCard = ["JACK", "QUEEN", "KING"];
+const deserializedDeck = (deck) => ({
+        deckId:  deck.deck_id,
+        cards: deck.cards,
+    })
+
+const deserializedCard = (card) => ({
+    card: card.cards[0]
+})
+
+
 const cardValues = (array) => {
     let value = 0;
     array.map((element) => {
-        switch(element) {
-            case "1":
-                value += 1;
-                break;
-            case "2":
-                value += 2;
-                break;
-            case "3":
-                value += 3;
-                break;
-            case "4":
-                value += 4;
-                break;
-            case "5":
-                value += 5;
-                break;
-            case "6":
-                value += 6;
-                break;
-            case "7":
-                value += 7;
-                break;
-            case "8":
-                value += 8;
-                break;
-            case "9":
-                value += 9;
-                break; 
-            case "10":
+        switch(element) { 
             case "JACK":
             case "QUEEN":
             case "KING":
@@ -39,13 +20,16 @@ const cardValues = (array) => {
             case "ACE":
                 value += 11;
                 break;
+            default:
+                value += parseInt(element);
+                break;
         }
     });
     return value;
 }
 
-const getCards = async(amount) => {
-    const URL = `https://www.deckofcardsapi.com/api/deck/new/draw/?count=${amount}`;
+const getCards = async(amount, deckId = 'new') => {
+    const URL = `https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=${amount}`;
     try{
         const cards = await fetch(URL);
         return await cards.json();
@@ -54,4 +38,4 @@ const getCards = async(amount) => {
     }
 }
 
-export { getCards, cardValues };
+export { getCards, cardValues, deserializedDeck, deserializedCard };
