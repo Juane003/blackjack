@@ -13,47 +13,58 @@ const Gameboard = () => {
   const [stop, setStop] = useState(false);
 
   useEffect(() => {
-      const fetchCards = async () => {
-          const cardObject = await getCards(2);
-          const {cards, deckId} = deserializedDeck(cardObject);
-
-          setHand(cards);
-          setResult(cards.map(element => element.value));
-          setDeckId(deckId);
-      };
-
-      fetchCards();
-      
-  }, []);
-
-  useEffect(() => {
-      setCount(cardValues(result));
+    let isAce = false;
+    const prevVal = count;
+    if (result.includes("ACE")) {
+      isAce = true;
+      if (isAce && prevVal + count + 11 > 21) {
+        setCount(cardValues(result) - 10);    
+      }
+    }    
+    setCount(cardValues(result));
   }, [result])
 
   if (!hand) {
       return null;
   }
 
-  const handleDrawClick = async () => {
-      const cardObject = await getCards(1, deckId);
-      const { card } = deserializedCard(cardObject)
+  const handleStart = () => {
+    const fetchCards = async () => {
+      const cardObject = await getCards(2);
+      const {cards, deckId} = deserializedDeck(cardObject);
 
-      setHand((old) => [...old, card]);
-      setResult((old) => [...old, card.value]);
+      setHand(cards);
+      setResult(cards.map(element => element.value));
+      setDeckId(deckId);
+    };
+    fetchCards();
   }
 
-  const limit = count >= 21 ? true : false
+  const handleDrawClick = async () => {
+    const cardObject = await getCards(1, deckId);
+    const { card } = deserializedCard(cardObject);
+    
+    setHand((old) => [...old, card]);
+    setResult((old) => [...old, card.value]);
+  }
+
+  const handleReset = () => {
+    if (count >= 21) {
+      setHand([]);
+      setResult([]);  
+     }
+  }
 
   const handleStop = () => {
     setStop(true);
   }
 
   return(
-    <div>
-      <Button text={"Draw a card"} onClick={handleDrawClick} disabled={limit || stop}/>
-      <Button text={"Stop"} onClick={handleStop}/>
+    <div className="board">
+      <Button className="" text={"Draw a card"} onClick={hand.length === 0 ? handleStart : count > 21 ? handleReset : handleDrawClick}/>
+      <Button className="" text={"Stop"} onClick={handleStop}/>
       <Display text={count}/>
-      <Deck cardList={hand}/>
+      <Deck cardList={hand} className="flex"/>
     </div>
   )
 }

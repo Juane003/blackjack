@@ -4,7 +4,7 @@ const deserializedDeck = (deck) => ({
     })
 
 const deserializedCard = (card) => ({
-    card: card.cards[0]
+    card: card.cards[0],
 })
 
 const cardValues = (array) => {
@@ -24,6 +24,7 @@ const cardValues = (array) => {
                 break;
         }
     });
+    console.log( "Valor" ,value);
     return value;
 }
 
